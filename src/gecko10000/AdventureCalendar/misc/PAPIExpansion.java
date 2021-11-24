@@ -5,7 +5,6 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -39,18 +38,10 @@ public class PAPIExpansion extends PlaceholderExpansion {
         return true;
     }
 
-    /*
-    Allowed formats:
-    claimed_total
-    claimed_(day)
-    timeuntil_next
-    timeuntil_(day)
-    next
-     */
     private final Predicate<String> validPlaceholder = Pattern.compile(
             "claimed_(\\d\\d?|total)|" +
             "timeuntil_(\\d\\d?|next)|" +
-            "next").asPredicate();
+            "next").asMatchPredicate();
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
@@ -63,7 +54,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
             try {
                 return day.equals("total")
                         ? PlayerDataManager.getClaimedPresents(player).get().size() + ""
-                        : PlayerDataManager.isClaimed(player, Integer.parseInt(day)).get() ? "Yes" : "No";
+                        : PlayerDataManager.isClaimed(player, Integer.parseInt(day)).get() + "";
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
                 return null;
