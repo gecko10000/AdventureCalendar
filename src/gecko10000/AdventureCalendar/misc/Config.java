@@ -17,9 +17,6 @@ public class Config {
     @ConfigValue("last-day")
     public static int lastDay = 25;
 
-    @ConfigValue("wrong-month-message")
-    public static String wrongMonthMessage = "&cIt is not %month% %first% - %last%!";
-
     @ConfigValue("sql.use-mySQL")
     public static boolean mySQL = false;
 
@@ -74,16 +71,19 @@ public class Config {
     @ConfigValue("gui.command-alias")
     public static String calendarAlias = "";
 
-    @ConfigValue("not-allowed-message")
+    @ConfigValue("messages.wrong-month")
+    public static String wrongMonthMessage = "&cIt is not %month% %first% - %last%!";
+
+    @ConfigValue("messages.not-allowed")
     public static String notAllowedMessage = "&cYou are not allowed to do this!";
 
-    @ConfigValue("no-present-message")
+    @ConfigValue("messages.no-present")
     public static String noPresentMessage = "&cThere is no present for this day!";
 
-    @ConfigValue("cannot-claim-today")
+    @ConfigValue("messages.cannot-claim-today")
     public static String cannotClaimToday = "&cYou cannot claim this today! Wait %adventurecalendar_timeuntil_%day%%!";
 
-    @ConfigValue("already-claimed")
+    @ConfigValue("messages.already-claimed")
     public static String alreadyClaimed = "&cYou have already claimed this present!";
 
 }
