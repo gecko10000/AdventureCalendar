@@ -9,7 +9,7 @@ This plugin provides an advent calendar, and most importantly the framework for 
 
 ## Usage
 
-This plugin requires [Spigot](https://www.spigotmc.org/wiki/buildtools/) (or a fork like Paper) and [RedLib](https://github.com/Redempt/RedLib/releases).
+This plugin requires [Spigot](https://www.spigotmc.org/resources/adventurecalendar.97849/) (or a fork like Paper) and [RedLib](https://github.com/Redempt/RedLib/releases).
 
 To add items and commands to presents, enter the editor with `/acal editor`.
 
