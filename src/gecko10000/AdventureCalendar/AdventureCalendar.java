@@ -9,10 +9,12 @@ import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import redempt.redlib.configmanager.ConfigManager;
 import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.misc.EventListener;
 
 import java.time.Month;
 import java.util.Map;
@@ -39,6 +41,8 @@ public class AdventureCalendar extends JavaPlugin {
         new PlayerDataManager(this);
         new CommandHandler(this);
         reload();
+        Bukkit.getOnlinePlayers().forEach(PlayerDataManager::initPlayer);
+        new EventListener<>(PlayerJoinEvent.class, evt -> PlayerDataManager.initPlayer(evt.getPlayer()));
     }
 
     public void onDisable() {
