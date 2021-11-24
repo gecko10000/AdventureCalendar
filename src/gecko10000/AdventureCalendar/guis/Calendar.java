@@ -36,7 +36,7 @@ public class Calendar {
         Set<Present> presents = new HashSet<>(plugin.presents.values());
         Iterator<Present> presentIterator = presents.iterator();
         int slot = 1;
-        while (slot < 53) {
+        while (slot < 53 && presentIterator.hasNext()) {
             Present present = presentIterator.next();
             gui.addButton(slot, buttonFor(present));
             slots.put(slot, present);
