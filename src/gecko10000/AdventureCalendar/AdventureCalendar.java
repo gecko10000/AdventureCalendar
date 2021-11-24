@@ -17,6 +17,7 @@ import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.misc.EventListener;
 
 import java.time.Month;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -58,7 +59,7 @@ public class AdventureCalendar extends JavaPlugin {
         }
         headDB = Bukkit.getPluginManager().isPluginEnabled("HeadDatabase");
         config = new ConfigManager(this)
-                .addConverter(Month.class, Month::valueOf, Month::toString)
+                .addConverter(Month.class, m -> Month.valueOf(m.toUpperCase()), Month::toString)
                 .register(Config.class)
                 .saveDefaults().load();
         presentConfig = new ConfigManager(this, "presents.yml")
