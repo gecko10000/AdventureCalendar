@@ -74,4 +74,16 @@ public class Config {
     @ConfigValue("gui.command-alias")
     public static String calendarAlias = "";
 
+    @ConfigValue("not-allowed-message")
+    public static String notAllowedMessage = "&cYou are not allowed to do this!";
+
+    @ConfigValue("no-present-message")
+    public static String noPresentMessage = "&cThere is no present for this day!";
+
+    @ConfigValue("cannot-claim-today")
+    public static String cannotClaimToday = "&cYou cannot claim this today! Wait %adventurecalendar_timeuntil_%day%%!";
+
+    @ConfigValue("already-claimed")
+    public static String alreadyClaimed = "&cYou have already claimed this present!";
+
 }

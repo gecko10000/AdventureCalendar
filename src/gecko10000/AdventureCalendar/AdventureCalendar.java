@@ -6,9 +6,11 @@ import gecko10000.AdventureCalendar.misc.PAPIExpansion;
 import gecko10000.AdventureCalendar.misc.PlayerDataManager;
 import gecko10000.AdventureCalendar.misc.Present;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -84,6 +86,14 @@ public class AdventureCalendar extends JavaPlugin {
             return new ItemStack(Material.BARRIER);
         }
         return new HeadDatabaseAPI().getItemHead(materialOrHead.split("-")[1]);
+    }
+
+    public static String placeholderMsg(String input, Player player, Present present) {
+        return placeholderMsg(input.replace("%day%", present.day + ""), player);
+    }
+
+    public static String placeholderMsg(String input, Player player) {
+        return msg(papi ? PlaceholderAPI.setPlaceholders(player, input) : input);
     }
 
     public static String msg(String input) {
