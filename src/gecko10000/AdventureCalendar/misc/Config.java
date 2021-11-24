@@ -86,4 +86,9 @@ public class Config {
     @ConfigValue("messages.already-claimed")
     public static String alreadyClaimed = "&cYou have already claimed this present!";
 
+    @ConfigValue("commands-to-run-on-every-present")
+    public static List<String> everyPresentCommands = ConfigManager.stringList(
+            "broadcast &a%player_name% &ejust claimed their day %day% present! &n/acal&e!"
+    );
+
 }

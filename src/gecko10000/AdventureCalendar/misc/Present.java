@@ -15,6 +15,7 @@ import redempt.redlib.configmanager.annotations.ConfigPostInit;
 import redempt.redlib.configmanager.annotations.ConfigValue;
 import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.itemutils.ItemUtils;
+import redempt.redlib.misc.Task;
 
 import java.time.*;
 import java.util.List;
@@ -126,7 +127,7 @@ public class Present {
                             Config.cannotClaimToday, player, this));
                     return;
                 }
-                execute(player);
+                Task.syncDelayed(() -> execute(player));
                 PlayerDataManager.set(player, day, true);
             } else {
                 player.sendMessage(AdventureCalendar.placeholderMsg(Config.alreadyClaimed, player, this));
@@ -138,6 +139,13 @@ public class Present {
     public void execute(Player player) {
         ItemUtils.give(player, items.toArray(new ItemStack[0]));
         for (String command : commands) {
+            if (AdventureCalendar.papi) {
+                command = PlaceholderAPI.setPlaceholders(player, command);
+            }
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+        }
+        for (String command : Config.everyPresentCommands) {
+            command = command.replace("%day%", day + "");
             if (AdventureCalendar.papi) {
                 command = PlaceholderAPI.setPlaceholders(player, command);
             }
