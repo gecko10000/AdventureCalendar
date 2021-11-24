@@ -1,0 +1,36 @@
+adventurecalendar,ac {
+    permission ac.menu
+    help Open the calendar menu
+    hook menu
+    user player
+    reload,r {
+        permission ac.reload
+        help Reload the config
+        hook reload
+    }
+    edit,e {
+        permission ac.edit
+        help Edit the daily presents
+        hook edit
+        user player
+    }
+    claim player:target?(context self) present:present? --force,-f {
+        permission ac.claim
+        help Claim today's gift
+        hook claim
+    }
+    reset present:present? player:target?(context self) {
+        permission ac.reset
+        help Reset a present for a player
+        hook reset
+        all player:target?(context self) {
+            permission ac.reset
+            help Reset all presents for a player
+            hook resetall
+            everyone {
+                permission ac.reset
+                help Reset
+            }
+        }
+    }
+}

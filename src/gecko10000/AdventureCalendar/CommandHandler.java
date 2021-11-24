@@ -1,0 +1,96 @@
+package gecko10000.AdventureCalendar;
+
+import gecko10000.AdventureCalendar.guis.Calendar;
+import gecko10000.AdventureCalendar.misc.Config;
+import gecko10000.AdventureCalendar.misc.PlayerDataManager;
+import gecko10000.AdventureCalendar.misc.Present;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import redempt.redlib.commandmanager.ArgType;
+import redempt.redlib.commandmanager.CommandHook;
+import redempt.redlib.commandmanager.CommandParser;
+import redempt.redlib.misc.FormatUtils;
+import redempt.redlib.misc.UserCache;
+
+import java.time.LocalDate;
+
+public class CommandHandler {
+
+    private final AdventureCalendar plugin;
+
+    public CommandHandler(AdventureCalendar plugin) {
+        this.plugin = plugin;
+        new CommandParser(plugin.getResource("command.rdcml"))
+                .setArgTypes(new ArgType<>("offlineplayer", UserCache::getOfflinePlayer),
+                        new ArgType<>("present", s -> plugin.presents.get(Integer.parseInt(s))))
+                .parse().register(plugin.getName(), this);
+    }
+
+    @CommandHook("menu")
+    public void menu(Player player) {
+        if (LocalDate.now().getMonth() != Config.month && !player.hasPermission("ac.bypass")) {
+            player.sendMessage(AdventureCalendar.msg(
+                    Config.wrongMonthMessage
+                            .replace("%month%", FormatUtils.toTitleCase(Config.month.toString()))
+                            .replace("%first%", Config.firstDay + "")
+                            .replace("%last%", Config.lastDay + "")
+            ));
+            return;
+        }
+        if (Config.calendarAlias.equals("")) {
+            new Calendar(plugin, player);
+        } else {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+                    Config.calendarAlias.replace("%player%", player.getName()));
+        }
+    }
+
+    @CommandHook("reload")
+    public void reload(CommandSender sender) {
+        plugin.reload();
+        sender.sendMessage(AdventureCalendar.msg("&aConfigs reloaded!"));
+    }
+
+    @CommandHook("edit")
+    public void edit(Player player) {
+        plugin.calendarEditor.open(player);
+    }
+
+    @CommandHook("claim")
+    public void claim(CommandSender sender, Player target, Present present, boolean force) {
+        if (force && !sender.hasPermission("ac.claim.force")) {
+            sender.sendMessage(AdventureCalendar.msg("&cYou are not allowed to do this!"));
+            return;
+        }
+        if (!sender.equals(target) && !sender.hasPermission("ac.claim.others")) {
+            sender.sendMessage(AdventureCalendar.msg("&cYou are not allowed to do this!"));
+            return;
+        }
+        if (present == null) {
+            sender.sendMessage(AdventureCalendar.msg("&cThere is no present for this day!"));
+            return;
+        }
+        present.claim(target, force);
+    }
+
+    @CommandHook("reset")
+    public void reset(CommandSender sender, Present present, Player target) {
+        Present finalPresent = present == null ? plugin.presents.get(LocalDate.now().getDayOfMonth()) : present;
+        if (finalPresent == null) {
+            return;
+        }
+        PlayerDataManager.set(target, finalPresent.day, false).thenAccept(unused -> {
+            sender.sendMessage(AdventureCalendar.msg("&aReset " + target.getName() + "'s claim status for day " + finalPresent.day));
+        });
+    }
+
+    @CommandHook("resetall")
+    public void resetall(CommandSender sender, Player target) {
+        PlayerDataManager.setRaw(target.getUniqueId(), 0).thenAccept(unused -> {
+            sender.sendMessage(AdventureCalendar.msg("&aReset advent calendar for " + target.getName() + "."));
+        });
+    }
+
+}
