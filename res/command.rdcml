@@ -3,12 +3,12 @@ adventurecalendar,ac {
     help Open the calendar menu
     hook menu
     user player
-    reload,r {
+    reload {
         permission ac.reload
         help Reload the config
         hook reload
     }
-    edit,e {
+    edit {
         permission ac.edit
         help Edit the daily presents
         hook edit
