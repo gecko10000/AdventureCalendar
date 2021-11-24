@@ -1,6 +1,7 @@
 package gecko10000.AdventureCalendar.misc;
 
 import gecko10000.AdventureCalendar.AdventureCalendar;
+import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 
@@ -54,7 +55,9 @@ public class PAPIExpansion extends PlaceholderExpansion {
             try {
                 return day.equals("total")
                         ? PlayerDataManager.getClaimedPresents(player).get().size() + ""
-                        : PlayerDataManager.isClaimed(player, Integer.parseInt(day)).get() + "";
+                        : PlayerDataManager.isClaimed(player, Integer.parseInt(day)).get()
+                            ? PlaceholderAPIPlugin.booleanTrue()
+                            : PlaceholderAPIPlugin.booleanFalse();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
                 return null;
