@@ -36,7 +36,7 @@ public class CommandHandler {
 
     @CommandHook("menu")
     public void menu(Player player) {
-        if (LocalDate.now().getMonth() != Config.month && !player.hasPermission("ac.bypass")) {
+        if (LocalDate.now().getMonth() != Config.month && !player.hasPermission("acal.bypass")) {
             player.sendMessage(AdventureCalendar.msg(
                     Config.wrongMonthMessage
                             .replace("%month%", FormatUtils.toTitleCase(Config.month.toString()))
@@ -65,11 +65,11 @@ public class CommandHandler {
 
     @CommandHook("claim")
     public void claim(CommandSender sender, Player target, Present present, boolean force) {
-        if (force && !sender.hasPermission("ac.claim.force")) {
+        if (force && !sender.hasPermission("acal.claim.force")) {
             sender.sendMessage(AdventureCalendar.msg("&cYou are not allowed to do this!"));
             return;
         }
-        if (!sender.equals(target) && !sender.hasPermission("ac.claim.others")) {
+        if (!sender.equals(target) && !sender.hasPermission("acal.claim.others")) {
             sender.sendMessage(AdventureCalendar.msg("&cYou are not allowed to do this!"));
             return;
         }

@@ -1,34 +1,34 @@
-adventurecalendar,ac {
-    permission ac.menu
+adventurecalendar,acal {
+    permission acal.menu
     help Open the calendar menu
     hook menu
     user player
     reload {
-        permission ac.reload
+        permission acal.reload
         help Reload the config
         hook reload
     }
     edit {
-        permission ac.edit
+        permission acal.edit
         help Edit the daily presents
         hook edit
         user player
     }
     claim player:target?(context self) present:present? --force,-f {
-        permission ac.claim
+        permission acal.claim
         help Claim today's gift
         hook claim
     }
     reset present:present? offlineplayer:target?(context self) {
-        permission ac.reset
+        permission acal.reset
         help Reset a present for a player
         hook resetOne
         all offlineplayer:target?(context self) {
-            permission ac.reset
+            permission acal.reset
             help Reset all presents for a player
             hook resetAll
             everyone {
-                permission ac.reset
+                permission acal.reset
                 help Reset all presents for everybody
                 hook resetAllEveryone
             }
@@ -37,7 +37,7 @@ adventurecalendar,ac {
     reset present:present {
         everyone {
             postarg
-            permission ac.reset
+            permission acal.reset
             help Reset a specific present for everybody
             hook resetOneEveryone
         }

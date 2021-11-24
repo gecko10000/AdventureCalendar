@@ -109,7 +109,7 @@ public class Present {
                     ? Config.missedMaterial
                     : Config.unclaimedMaterial))
                 .setName(name).addLore(lore).setCount(day).addItemFlags(ItemFlag.values());
-        if (!claimed && day != LocalDate.now().getDayOfMonth()) {
+        if (!claimed && !isClaimable()) {
             return item;
         }
         return item.addEnchant(Enchantment.DURABILITY, 1);
