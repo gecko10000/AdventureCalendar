@@ -47,11 +47,6 @@ public class Present {
         dayString = "" + day;
     }
 
-    public Present add(String command) {
-        commands.add(command);
-        return this;
-    }
-
     public Present addItems(List<ItemStack> items) {
         items.forEach(this::add);
         return this;
@@ -96,10 +91,9 @@ public class Present {
 
     public ItemStack item(Player player, boolean claimed) {
         String name = AdventureCalendar.msg(color() + (claimed ? Config.claimedName : isVoid() ? Config.missedName : Config.unclaimedName).replace("%day%", day + ""));
-        name = AdventureCalendar.papi ? PlaceholderAPI.setPlaceholders(player, name) : name;
+        name = AdventureCalendar.placeholderMsg(name, player, this);
         List<String> lore = (claimed ? Config.claimedLore : isVoid() ? Config.missedLore : Config.unclaimedLore).stream()
-                .map(s -> s.replace("%day%", day + ""))
-                .map(s -> AdventureCalendar.papi ? PlaceholderAPI.setPlaceholders(player, s) : s)
+                .map(s -> AdventureCalendar.placeholderMsg(s, player, this))
                 .collect(Collectors.toList());
         ItemBuilder item = new ItemBuilder(AdventureCalendar.getItem(claimed
                 ? items.size() == 0 || !Config.useClaimedItem
@@ -125,19 +119,20 @@ public class Present {
     }
 
     public void claim(Player player, boolean force) {
-        if (!isClaimable() && !force) {
-            player.sendMessage(AdventureCalendar.msg("&cYou cannot claim that present today!"));
-            return;
-        }
-        PlayerDataManager.isClaimed(player, day)
-            .thenAccept(claimed -> {
-                if (!claimed || force) {
-                    execute(player);
-                    PlayerDataManager.set(player, day, true);
-                } else {
-                    player.sendMessage(AdventureCalendar.msg("&cYou have already claimed this present!"));
+        PlayerDataManager.isClaimed(player, day).thenAccept(claimed -> {
+            if (!claimed || force) {
+                if (!isClaimable() && !force) {
+                    player.sendMessage(AdventureCalendar.placeholderMsg(
+                            Config.cannotClaimToday, player, this));
+                    return;
                 }
-            });
+                execute(player);
+                PlayerDataManager.set(player, day, true);
+            } else {
+                player.sendMessage(AdventureCalendar.placeholderMsg(Config.alreadyClaimed, player, this));
+            }
+        });
+
     }
 
     public void execute(Player player) {
