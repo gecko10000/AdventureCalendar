@@ -11,16 +11,16 @@ public class Config {
     @ConfigValue
     public static Month month = Month.DECEMBER;
 
-    @ConfigValue
+    @ConfigValue("first-day")
     public static int firstDay = 1;
 
-    @ConfigValue
+    @ConfigValue("last-day")
     public static int lastDay = 25;
 
-    @ConfigValue
+    @ConfigValue("wrong-month-message")
     public static String wrongMonthMessage = "&cIt is not %month% %first% - %last%!";
 
-    @ConfigValue("sql.mySQL")
+    @ConfigValue("sql.use-mySQL")
     public static boolean mySQL = false;
 
     @ConfigValue("sql.ip")
