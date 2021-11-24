@@ -120,9 +120,12 @@ public class Present {
         return date.isAfter(LocalDate.of(date.getYear(), Config.month, day));
     }
 
+    public boolean isClaimable() {
+        return LocalDate.of(LocalDate.now().getYear(), Config.month, day).equals(LocalDate.now());
+    }
+
     public void claim(Player player, boolean force) {
-        int dayOfMonth = LocalDate.now().getDayOfMonth();
-        if (day != dayOfMonth && !force) {
+        if (!isClaimable() && !force) {
             player.sendMessage(AdventureCalendar.msg("&cYou cannot claim that present today!"));
             return;
         }
