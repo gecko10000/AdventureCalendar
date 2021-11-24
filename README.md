@@ -16,7 +16,6 @@ To add items and commands to presents, enter the editor with `/acal editor`.
 Players will use `/acal` to open the GUI (you must grant the `acal.menu` permission!)
 
 ## Commands
-
 `/adventurecalendar` (`/acal`):
 * `reload` - reload the config
 * `edit` - enter the present editor
@@ -38,5 +37,14 @@ Players will use `/acal` to open the GUI (you must grant the `acal.menu` permiss
 * `first-day`, `last-day` - days between which presents will be avaliable
 * `sql` - optional, used to fill out info for a MySQL database
 * `items` - info for different display items in the `/ac` menu
+  * Supports Head Database, use the format `hdb-(id)` for heads as materials
 * `use-claimed-item-from-day-automatically` - displays item from the list of items for a present
 * `gui.command-alias` - empty will open the default menu, otherwise `/acal` will be mapped to this command
+
+## Placeholders
+This plugin supports PlaceholderAPI by default. There are a couple of placeholders you can use to interact with other plugins, especially GUI menus:
+* `%adventurecalendar_next%` - returns the day of the upcoming present
+* `%adventurecalendar_timeuntil_next%` - returns the time until the next present
+* `%adventurecalendar_timeuntil_(day)%` - returns time until a specific present
+* `%adventurecalendar_claimed_total%` - returns the total number of presents claimed
+* `%adventurecalendar_claimed_(day)%` - returns true or false based on whether the present that day has been claimed
