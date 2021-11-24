@@ -70,15 +70,23 @@ public class PAPIExpansion extends PlaceholderExpansion {
             }
         }
         if (split[0].equals("next")) {
-            return LocalDate.now().plusDays(1).getDayOfMonth() + "";
+            return getSoonestPresent() + "";
         }
         LocalDate date = LocalDate.now();
         Present present = day.equals("next")
-                ? plugin.presents.get(LocalDate.now().plusDays(1).getDayOfMonth())
+                ? plugin.presents.get(getSoonestPresent())
                 : plugin.presents.get(Integer.parseInt(day));
         if (present == null) {
             return null;
         }
         return present.formattedTimeUntilUnlock() + "";
     }
+
+    private int getSoonestPresent() {
+        return plugin.presents.keySet().stream()
+                .sorted()
+                .dropWhile(i -> i < LocalDate.now().getDayOfMonth())
+                .findFirst().orElse(0);
+    }
+
 }
