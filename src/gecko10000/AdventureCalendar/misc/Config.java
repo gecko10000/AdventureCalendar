@@ -59,6 +59,9 @@ public class Config {
     @ConfigValue("items.missed.material")
     public static String missedMaterial = "MINECART";
 
+    @ConfigValue("items.missed.use-claimed-item-from-day-automatically")
+    public static boolean useClaimedItem = true;
+
     @ConfigValue("items.missed.name")
     public static String missedName = "Day %day%";
 

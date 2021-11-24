@@ -101,7 +101,13 @@ public class Present {
                 .map(s -> s.replace("%day%", day + ""))
                 .map(s -> AdventureCalendar.papi ? PlaceholderAPI.setPlaceholders(player, s) : s)
                 .collect(Collectors.toList());
-        ItemBuilder item = new ItemBuilder(AdventureCalendar.getItem(claimed ? Config.claimedMaterial : isVoid() ? Config.missedMaterial : Config.unclaimedMaterial))
+        ItemBuilder item = new ItemBuilder(AdventureCalendar.getItem(claimed
+                ? items.size() == 0 || !Config.useClaimedItem
+                    ? Config.claimedMaterial
+                    : items.get(0).getType().toString()
+                : isVoid()
+                    ? Config.missedMaterial
+                    : Config.unclaimedMaterial))
                 .setName(name).addLore(lore).setCount(day).addItemFlags(ItemFlag.values());
         if (!claimed && day != LocalDate.now().getDayOfMonth()) {
             return item;
@@ -111,7 +117,7 @@ public class Present {
 
     public boolean isVoid() {
         LocalDate date = LocalDate.now();
-        return date.getDayOfMonth() > day;
+        return date.isAfter(LocalDate.of(date.getYear(), Config.month, day));
     }
 
     public void claim(Player player, boolean force) {
