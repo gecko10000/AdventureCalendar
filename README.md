@@ -1,5 +1,5 @@
 # AdventureCalendar
-Minecraft plugin that adds an advent calendar for the holidays.
+A plugin to replicate that childhood feeling of going through an advent calendar!
 
 ## About
 
