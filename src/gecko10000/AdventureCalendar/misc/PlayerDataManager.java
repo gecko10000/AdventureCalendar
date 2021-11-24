@@ -37,8 +37,10 @@ public class PlayerDataManager {
                 ? SQLHelper.openMySQL(Config.ip, Config.port, Config.username, Config.password, Config.database)
                 : SQLHelper.openSQLite(plugin.getDataFolder().toPath().resolve("data.db"));
         sql = new SQLHelper(connection);
-        EXECUTOR.execute(() -> sql.execute("CREATE TABLE IF NOT EXISTS claimed (uuid VARCHAR(36) PRIMARY KEY, presents INT)"));
-        cache = sql.createCache("claimed", "presents", "uuid");
+        EXECUTOR.execute(() -> {
+            sql.execute("CREATE TABLE IF NOT EXISTS claimed (uuid VARCHAR(36) PRIMARY KEY, presents INT)");
+            cache = sql.createCache("claimed", "presents", "uuid");
+        });
         sql.setCommitInterval(5*60*20);
     }
 
@@ -56,6 +58,12 @@ public class PlayerDataManager {
         return CompletableFuture.runAsync(() -> {
             sql.execute("INSERT OR IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", uuid, value);
             cache.update(value, uuid);
+        }, EXECUTOR);
+    }
+
+    public static CompletableFuture<Void> initPlayer(OfflinePlayer player) {
+        return CompletableFuture.runAsync(() -> {
+            sql.execute("INSERT OR IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", player.getUniqueId(), 0);
         }, EXECUTOR);
     }
 
@@ -85,6 +93,13 @@ public class PlayerDataManager {
     public static CompletableFuture<Void> clearAll() {
         return CompletableFuture.runAsync(() -> {
             sql.execute("DELETE FROM claimed;");
+            cache.clear();
+        }, EXECUTOR);
+    }
+
+    public static CompletableFuture<Void> clearAll(int day) {
+        return CompletableFuture.runAsync(() -> {
+            sql.execute("UPDATE claimed SET presents = presents & ?;", ~(1 << (day - 1)));
             cache.clear();
         }, EXECUTOR);
     }

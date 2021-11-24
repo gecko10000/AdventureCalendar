@@ -22,7 +22,7 @@ adventurecalendar,ac {
     reset present:present? offlineplayer:target?(context self) {
         permission ac.reset
         help Reset a present for a player
-        hook reset
+        hook resetOne
         all offlineplayer:target?(context self) {
             permission ac.reset
             help Reset all presents for a player
@@ -32,6 +32,14 @@ adventurecalendar,ac {
                 help Reset all presents for everybody
                 hook resetAllEveryone
             }
+        }
+    }
+    reset present:present {
+        everyone {
+            postarg
+            permission ac.reset
+            help Reset a specific present for everybody
+            hook resetOneEveryone
         }
     }
 }

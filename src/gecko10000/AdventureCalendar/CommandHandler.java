@@ -74,6 +74,7 @@ public class CommandHandler {
             sender.sendMessage(AdventureCalendar.msg("&cYou are not allowed to do this!"));
             return;
         }
+        present = present == null ? plugin.presents.get(LocalDate.now().getDayOfMonth()) : present;
         if (present == null) {
             sender.sendMessage(AdventureCalendar.msg("&cThere is no present for this day!"));
             return;
@@ -81,7 +82,7 @@ public class CommandHandler {
         present.claim(target, force);
     }
 
-    @CommandHook("reset")
+    @CommandHook("resetOne")
     public void reset(CommandSender sender, Present present, OfflinePlayer target) {
         Present finalPresent = present == null ? plugin.presents.get(LocalDate.now().getDayOfMonth()) : present;
         if (finalPresent == null) {
@@ -103,15 +104,32 @@ public class CommandHandler {
 
     @CommandHook("resetAllEveryone")
     public void resetAllEveryone(CommandSender sender) {
-        if (!resetConfirmations.remove(sender)) {
-            resetConfirmations.add(sender);
-            Task.syncDelayed(() -> resetConfirmations.remove(sender), 200);
-            sender.sendMessage(AdventureCalendar.msg("&cThis is a dangerous command. Run again in the next 10 seconds to confirm."));
+        if (!confirm(sender)) {
             return;
         }
         PlayerDataManager.clearAll().thenAccept(unused -> {
             sender.sendMessage(AdventureCalendar.msg("&aReset advent calendar for everyone."));
         });
+    }
+
+    @CommandHook("resetOneEveryone")
+    public void resetOneEveryone(CommandSender sender, Present present) {
+        if (!confirm(sender)) {
+            return;
+        }
+        PlayerDataManager.clearAll(present.day).thenAccept(unused -> {
+            sender.sendMessage(AdventureCalendar.msg("&aReset day " + present.day + " for everyone."));
+        });
+    }
+
+    private boolean confirm(CommandSender sender) {
+        if (!resetConfirmations.remove(sender)) {
+            resetConfirmations.add(sender);
+            Task.syncDelayed(() -> resetConfirmations.remove(sender), 200);
+            sender.sendMessage(AdventureCalendar.msg("&cThis is a dangerous command. Run again in the next 10 seconds to confirm."));
+            return false;
+        }
+        return true;
     }
 
 }
