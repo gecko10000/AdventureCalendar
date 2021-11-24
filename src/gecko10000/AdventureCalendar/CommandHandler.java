@@ -48,8 +48,7 @@ public class CommandHandler {
         if (Config.calendarAlias.equals("")) {
             new Calendar(plugin, player);
         } else {
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                    Config.calendarAlias.replace("%player%", player.getName()));
+            Bukkit.dispatchCommand(player, Config.calendarAlias.replace("%player%", player.getName()));
         }
     }
 
