@@ -56,7 +56,7 @@ public class PlayerDataManager {
         return CompletableFuture.runAsync(() -> {
             sql.execute("INSERT OR IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", uuid, value);
             cache.update(value, uuid);
-        });
+        }, EXECUTOR);
     }
 
     public static CompletableFuture<List<Integer>> getClaimedPresents(OfflinePlayer player) {
@@ -79,6 +79,13 @@ public class PlayerDataManager {
         return CompletableFuture.supplyAsync(() -> {
             Integer encoded = cache.select(player.getUniqueId());
             return encoded != null && (encoded >> (day-1) & 1) != 0;
+        }, EXECUTOR);
+    }
+
+    public static CompletableFuture<Void> clearAll() {
+        return CompletableFuture.runAsync(() -> {
+            sql.execute("DELETE FROM claimed;");
+            cache.clear();
         }, EXECUTOR);
     }
 

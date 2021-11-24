@@ -19,17 +19,18 @@ adventurecalendar,ac {
         help Claim today's gift
         hook claim
     }
-    reset present:present? player:target?(context self) {
+    reset present:present? offlineplayer:target?(context self) {
         permission ac.reset
         help Reset a present for a player
         hook reset
-        all player:target?(context self) {
+        all offlineplayer:target?(context self) {
             permission ac.reset
             help Reset all presents for a player
-            hook resetall
+            hook resetAll
             everyone {
                 permission ac.reset
-                help Reset
+                help Reset all presents for everybody
+                hook resetAllEveryone
             }
         }
     }

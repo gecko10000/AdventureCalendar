@@ -12,9 +12,12 @@ import redempt.redlib.commandmanager.ArgType;
 import redempt.redlib.commandmanager.CommandHook;
 import redempt.redlib.commandmanager.CommandParser;
 import redempt.redlib.misc.FormatUtils;
+import redempt.redlib.misc.Task;
 import redempt.redlib.misc.UserCache;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CommandHandler {
 
@@ -22,9 +25,12 @@ public class CommandHandler {
 
     public CommandHandler(AdventureCalendar plugin) {
         this.plugin = plugin;
+        UserCache.asyncInit();
         new CommandParser(plugin.getResource("command.rdcml"))
-                .setArgTypes(new ArgType<>("offlineplayer", UserCache::getOfflinePlayer),
-                        new ArgType<>("present", s -> plugin.presents.get(Integer.parseInt(s))))
+                .setArgTypes(new ArgType<>("offlineplayer", UserCache::getOfflinePlayer)
+                                .tabStream(sender -> Bukkit.getOnlinePlayers().stream().map(Player::getName)),
+                        new ArgType<>("present", s -> plugin.presents.get(Integer.parseInt(s)))
+                                .tabStream(sender -> plugin.presents.keySet().stream().map(i -> i + "")))
                 .parse().register(plugin.getName(), this);
     }
 
@@ -76,7 +82,7 @@ public class CommandHandler {
     }
 
     @CommandHook("reset")
-    public void reset(CommandSender sender, Present present, Player target) {
+    public void reset(CommandSender sender, Present present, OfflinePlayer target) {
         Present finalPresent = present == null ? plugin.presents.get(LocalDate.now().getDayOfMonth()) : present;
         if (finalPresent == null) {
             return;
@@ -86,10 +92,25 @@ public class CommandHandler {
         });
     }
 
-    @CommandHook("resetall")
-    public void resetall(CommandSender sender, Player target) {
+    @CommandHook("resetAll")
+    public void resetAll(CommandSender sender, OfflinePlayer target) {
         PlayerDataManager.setRaw(target.getUniqueId(), 0).thenAccept(unused -> {
             sender.sendMessage(AdventureCalendar.msg("&aReset advent calendar for " + target.getName() + "."));
+        });
+    }
+
+    private final Set<CommandSender> resetConfirmations = new HashSet<>();
+
+    @CommandHook("resetAllEveryone")
+    public void resetAllEveryone(CommandSender sender) {
+        if (!resetConfirmations.remove(sender)) {
+            resetConfirmations.add(sender);
+            Task.syncDelayed(() -> resetConfirmations.remove(sender), 200);
+            sender.sendMessage(AdventureCalendar.msg("&cThis is a dangerous command. Run again in the next 10 seconds to confirm."));
+            return;
+        }
+        PlayerDataManager.clearAll().thenAccept(unused -> {
+            sender.sendMessage(AdventureCalendar.msg("&aReset advent calendar for everyone."));
         });
     }
 
