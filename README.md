@@ -5,7 +5,7 @@ A plugin to replicate that childhood feeling of going through an advent calendar
 
 After seeing how few advent calendar plugins there are (specifically a bloated paid one I shall not name), I decided to create my own.
 
-This plugin provides an advent calendar, and most importantly the framework for one. If you don't like the menu, it's super easy to use commands and placeholders to create your own.
+This plugin provides an advent calendar, and most importantly the framework for one. If you don't like the menu, it's super easy to use commands and placeholders to create your own. In fact, [here](https://paste.md-5.net/uvomalelix.http) is an example DeluxeMenus menu that will automatically update the center item as the days go on, and can be used in place of the default menu (just set the command alias to `dm open example_calendar %player_name%`).
 
 ## Usage
 
