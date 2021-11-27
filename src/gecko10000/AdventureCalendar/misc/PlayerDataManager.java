@@ -1,6 +1,7 @@
 package gecko10000.AdventureCalendar.misc;
 
 import gecko10000.AdventureCalendar.AdventureCalendar;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import redempt.redlib.sql.SQLCache;
 import redempt.redlib.sql.SQLHelper;
@@ -47,37 +48,53 @@ public class PlayerDataManager {
     public static CompletableFuture<Void> set(OfflinePlayer player, int day, boolean claimed) {
         UUID uuid = player.getUniqueId();
         return CompletableFuture.runAsync(() -> {
-            Integer encoded = cache.select(uuid);
-            encoded = encoded == null ? 0 : encoded;
-            int newNum = claimed ? encoded | (1 << day - 1) : encoded & ~(1 << day - 1);
-            setRaw(uuid, newNum);
+            try {
+                Integer encoded = cache.select(uuid.toString());
+                encoded = encoded == null ? 0 : encoded;
+                int newNum = claimed ? encoded | (1 << day - 1) : encoded & ~(1 << day - 1);
+                setRaw(uuid, newNum);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }, EXECUTOR);
     }
 
     public static CompletableFuture<Void> setRaw(UUID uuid, int value) {
         return CompletableFuture.runAsync(() -> {
-            sql.execute("INSERT OR IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", uuid, value);
-            cache.update(value, uuid);
+            try {
+                sql.execute("INSERT " + (Config.mySQL ? "" : "OR ") + "IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", uuid.toString(), value);
+                cache.update(value, uuid.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }, EXECUTOR);
     }
 
     public static CompletableFuture<Void> initPlayer(OfflinePlayer player) {
         return CompletableFuture.runAsync(() -> {
-            sql.execute("INSERT OR IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", player.getUniqueId(), 0);
+            try {
+                sql.execute("INSERT " + (Config.mySQL ? "" : "OR ") + "IGNORE INTO claimed (uuid, presents) VALUES (?, ?);", player.getUniqueId().toString(), 0);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }, EXECUTOR);
     }
 
     public static CompletableFuture<List<Integer>> getClaimedPresents(OfflinePlayer player) {
         return CompletableFuture.supplyAsync(() -> {
             List<Integer> claimed = new ArrayList<>();
-            Integer encoded = cache.select(player.getUniqueId());
-            if (encoded != null) {
-                for (int i = 1; i <= 32; i++) {
-                    if ((encoded & 1) != 0) {
-                        claimed.add(i);
+            try {
+                Integer encoded = cache.select(player.getUniqueId().toString());
+                if (encoded != null) {
+                    for (int i = 1; i <= 32; i++) {
+                        if ((encoded & 1) != 0) {
+                            claimed.add(i);
+                        }
+                        encoded >>= 1;
                     }
-                    encoded >>= 1;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return claimed;
         }, EXECUTOR);
@@ -85,22 +102,36 @@ public class PlayerDataManager {
 
     public static CompletableFuture<Boolean> isClaimed(OfflinePlayer player, int day) {
         return CompletableFuture.supplyAsync(() -> {
-            Integer encoded = cache.select(player.getUniqueId());
-            return encoded != null && (encoded >> (day-1) & 1) != 0;
+            try {
+                Integer encoded = cache.select(player.getUniqueId().toString());
+                return encoded != null && (encoded >> (day-1) & 1) != 0;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }, EXECUTOR);
     }
 
     public static CompletableFuture<Void> clearAll() {
         return CompletableFuture.runAsync(() -> {
-            sql.execute("DELETE FROM claimed;");
-            cache.clear();
+            try {
+                sql.execute("DELETE FROM claimed;");
+                cache.clear();
+                Bukkit.getOnlinePlayers().forEach(PlayerDataManager::initPlayer);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }, EXECUTOR);
     }
 
     public static CompletableFuture<Void> clearAll(int day) {
         return CompletableFuture.runAsync(() -> {
-            sql.execute("UPDATE claimed SET presents = presents & ?;", ~(1 << (day - 1)));
-            cache.clear();
+            try {
+                sql.execute("UPDATE claimed SET presents = presents & ?;", ~(1 << (day - 1)));
+                cache.clear();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }, EXECUTOR);
     }
 
