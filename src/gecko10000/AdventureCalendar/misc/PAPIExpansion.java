@@ -66,7 +66,6 @@ public class PAPIExpansion extends PlaceholderExpansion {
         if (split[0].equals("next")) {
             return getSoonestPresent() + "";
         }
-        LocalDate date = LocalDate.now();
         Present present = day.equals("next")
                 ? plugin.presents.get(getSoonestPresent())
                 : plugin.presents.get(Integer.parseInt(day));
@@ -79,7 +78,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
     private int getSoonestPresent() {
         return plugin.presents.keySet().stream()
                 .sorted()
-                .dropWhile(i -> i < LocalDate.now().getDayOfMonth())
+                .dropWhile(i -> i <= LocalDate.now().getDayOfMonth())
                 .findFirst().orElse(0);
     }
 
