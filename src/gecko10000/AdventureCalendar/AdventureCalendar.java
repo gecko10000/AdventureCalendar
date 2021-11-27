@@ -89,7 +89,7 @@ public class AdventureCalendar extends JavaPlugin {
     }
 
     public static String placeholderMsg(String input, Player player, Present present) {
-        return placeholderMsg(input.replace("%day%", present.day + ""), player);
+        return placeholderMsg(input.replace("{day}", present.day + ""), player);
     }
 
     public static String placeholderMsg(String input, Player player) {

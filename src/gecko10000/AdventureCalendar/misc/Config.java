@@ -39,16 +39,16 @@ public class Config {
     public static String unclaimedMaterial = "CHEST_MINECART";
 
     @ConfigValue("items.unclaimed.name")
-    public static String unclaimedName = "Day %day%";
+    public static String unclaimedName = "Day {day}";
 
     @ConfigValue("items.unclaimed.lore")
-    public static List<String> unclaimedLore = ConfigManager.stringList("&fTime to unlock: %adventurecalendar_timeuntil_%day%%");
+    public static List<String> unclaimedLore = ConfigManager.stringList("&fTime to unlock: %adventurecalendar_timeuntil_{day}%");
 
     @ConfigValue("items.claimed.material")
     public static String claimedMaterial = "MINECART";
 
     @ConfigValue("items.claimed.name")
-    public static String claimedName = "Day %day%";
+    public static String claimedName = "Day {day}";
 
     @ConfigValue("items.claimed.lore")
     public static List<String> claimedLore = ConfigManager.stringList("&2Already claimed!");
@@ -60,7 +60,7 @@ public class Config {
     public static String missedMaterial = "MINECART";
 
     @ConfigValue("items.missed.name")
-    public static String missedName = "Day %day%";
+    public static String missedName = "Day {day}";
 
     @ConfigValue("items.missed.lore")
     public static List<String> missedLore = ConfigManager.stringList("&4You missed this one!");
@@ -84,14 +84,14 @@ public class Config {
     public static String missedPresent = "&cYou missed this present!";
 
     @ConfigValue("messages.cannot-claim-today")
-    public static String cannotClaimToday = "&cYou cannot claim this today! Wait %adventurecalendar_timeuntil_%day%%!";
+    public static String cannotClaimToday = "&cYou cannot claim this today! Wait %adventurecalendar_timeuntil_{day}%!";
 
     @ConfigValue("messages.already-claimed")
     public static String alreadyClaimed = "&cYou have already claimed this present!";
 
     @ConfigValue("commands-to-run-on-every-present")
     public static List<String> everyPresentCommands = ConfigManager.stringList(
-            "broadcast &a%player_name% &ejust claimed their day %day% present! &n/acal&e!"
+            "broadcast &a%player_name% &ejust claimed their day {day} present! &n/acal&e!"
     );
 
     @ConfigValue("unlocked-present-word")

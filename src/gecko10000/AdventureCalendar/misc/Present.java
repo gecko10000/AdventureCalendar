@@ -91,7 +91,9 @@ public class Present {
     }
 
     public ItemStack item(Player player, boolean claimed) {
-        String name = AdventureCalendar.msg(color() + (claimed ? Config.claimedName : isVoid() ? Config.missedName : Config.unclaimedName).replace("%day%", day + ""));
+        String name = AdventureCalendar.placeholderMsg(
+                color() + (claimed ? Config.claimedName : isVoid() ? Config.missedName : Config.unclaimedName),
+                player, this);
         name = AdventureCalendar.placeholderMsg(name, player, this);
         List<String> lore = (claimed ? Config.claimedLore : isVoid() ? Config.missedLore : Config.unclaimedLore).stream()
                 .map(s -> AdventureCalendar.placeholderMsg(s, player, this))
@@ -145,7 +147,7 @@ public class Present {
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }
         for (String command : Config.everyPresentCommands) {
-            command = command.replace("%day%", day + "");
+            command = command.replace("{day}", day + "");
             if (AdventureCalendar.papi) {
                 command = PlaceholderAPI.setPlaceholders(player, command);
             }
