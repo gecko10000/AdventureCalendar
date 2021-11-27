@@ -33,7 +33,7 @@ public class Config {
     public static String password = "password";
 
     @ConfigValue("sql.database")
-    public static String database = "database";
+    public static String database = "adventurecalendar";
 
     @ConfigValue("items.unclaimed.material")
     public static String unclaimedMaterial = "CHEST_MINECART";
@@ -80,6 +80,9 @@ public class Config {
     @ConfigValue("messages.no-present")
     public static String noPresentMessage = "&cThere is no present for this day!";
 
+    @ConfigValue("messages.missed-present")
+    public static String missedPresent = "&cYou missed this present!";
+
     @ConfigValue("messages.cannot-claim-today")
     public static String cannotClaimToday = "&cYou cannot claim this today! Wait %adventurecalendar_timeuntil_%day%%!";
 
@@ -90,5 +93,8 @@ public class Config {
     public static List<String> everyPresentCommands = ConfigManager.stringList(
             "broadcast &a%player_name% &ejust claimed their day %day% present! &n/acal&e!"
     );
+
+    @ConfigValue("unlocked-present-word")
+    public static String unlockedPresentWord = "Unlocked";
 
 }

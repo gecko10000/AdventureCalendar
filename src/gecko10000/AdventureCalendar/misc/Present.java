@@ -71,7 +71,7 @@ public class Present {
     public String formattedTimeUntilUnlock() {
         long seconds = secondsUntilUnlock();
         if (seconds <= 0) {
-            return "Unlocked";
+            return Config.unlockedPresentWord;
         }
         return String.format("%01d:%02d:%02d:%02d", seconds/86400, (seconds % 86400) / 3600, (seconds % 3600) / 60, (seconds % 60));
     }
@@ -124,7 +124,7 @@ public class Present {
             if (!claimed || force) {
                 if (!isClaimable() && !force) {
                     player.sendMessage(AdventureCalendar.placeholderMsg(
-                            Config.cannotClaimToday, player, this));
+                            isVoid() ? Config.missedPresent : Config.cannotClaimToday, player, this));
                     return;
                 }
                 Task.syncDelayed(() -> execute(player));
@@ -137,7 +137,7 @@ public class Present {
     }
 
     public void execute(Player player) {
-        ItemUtils.give(player, items.toArray(new ItemStack[0]));
+        ItemUtils.give(player, items.stream().map(ItemStack::clone).toArray(ItemStack[]::new));
         for (String command : commands) {
             if (AdventureCalendar.papi) {
                 command = PlaceholderAPI.setPlaceholders(player, command);
