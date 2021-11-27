@@ -41,9 +41,9 @@ public class AdventureCalendar extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
+        reload();
         new PlayerDataManager(this);
         new CommandHandler(this);
-        reload();
         Bukkit.getOnlinePlayers().forEach(PlayerDataManager::initPlayer);
         new EventListener<>(PlayerJoinEvent.class, evt -> PlayerDataManager.initPlayer(evt.getPlayer()));
     }
