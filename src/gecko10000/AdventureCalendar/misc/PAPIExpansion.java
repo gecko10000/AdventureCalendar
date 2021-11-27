@@ -46,6 +46,8 @@ public class PAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
+        int currentDay = LocalDate.now().getDayOfMonth();
+        params = params.replace("{day}", currentDay + "");
         if (!validPlaceholder.test(params)) {
             return null;
         }
