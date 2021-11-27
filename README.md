@@ -44,7 +44,10 @@ Players will use `/acal` to open the GUI (you must grant the `acal.menu` permiss
 ## Placeholders
 This plugin supports PlaceholderAPI by default. There are a couple of placeholders you can use to interact with other plugins, especially GUI menus:
 * `%adventurecalendar_next%` - returns the day of the upcoming present
+* `%adventurecalendar_current%` - returns the current day of the month
 * `%adventurecalendar_timeuntil_next%` - returns the time until the next present
 * `%adventurecalendar_timeuntil_(day)%` - returns time until a specific present
 * `%adventurecalendar_claimed_total%` - returns the total number of presents claimed
 * `%adventurecalendar_claimed_(day)%` - returns true or false based on whether the present that day has been claimed
+
+Using `{day}` within placeholders will automatically be replaced with the day of the month.
