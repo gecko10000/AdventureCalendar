@@ -42,7 +42,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
     private final Predicate<String> validPlaceholder = Pattern.compile(
             "claimed_(\\d\\d?|total)|" +
             "timeuntil_(\\d\\d?|next)|" +
-            "next").asMatchPredicate();
+            "next|current").asMatchPredicate();
 
     @Override
     public String onRequest(OfflinePlayer player, String params) {
@@ -67,6 +67,9 @@ public class PAPIExpansion extends PlaceholderExpansion {
         }
         if (split[0].equals("next")) {
             return getSoonestPresent() + "";
+        }
+        if (split[0].equals("current")) {
+            return (getSoonestPresent() - 1) + "";
         }
         Present present = day.equals("next")
                 ? plugin.presents.get(getSoonestPresent())
