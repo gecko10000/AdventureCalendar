@@ -15,7 +15,7 @@ sourceSets {
 }
 
 group 'io.github.gecko10000'
-version '1.3'
+version '1.4'
 sourceCompatibility=16
 targetCompatibility=16
 
