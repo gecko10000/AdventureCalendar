@@ -38,7 +38,7 @@ tasks.register("ftp") {
     doLast {
         exec {
             workingDir "../../"
-            commandLine "./upload.sh", "AdventureCalendar"
+            commandLine "./bin/upload.sh", "AdventureCalendar"
         }
     }
 }

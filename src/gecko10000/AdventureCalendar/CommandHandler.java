@@ -46,6 +46,10 @@ public class CommandHandler {
             return;
         }
         if (Config.calendarAlias.equals("")) {
+            if (plugin.calendarEditor == null) {
+                player.sendMessage(AdventureCalendar.msg(Config.headDatabaseNotLoadedYet));
+                return;
+            }
             new Calendar(plugin, player);
         } else {
             Bukkit.dispatchCommand(player, AdventureCalendar.placeholderMsg(Config.calendarAlias, player));
@@ -60,6 +64,10 @@ public class CommandHandler {
 
     @CommandHook("edit")
     public void edit(Player player) {
+        if (plugin.calendarEditor == null) {
+            player.sendMessage(AdventureCalendar.msg("&cHDB not loaded yet."));
+            return;
+        }
         plugin.calendarEditor.open(player);
     }
 

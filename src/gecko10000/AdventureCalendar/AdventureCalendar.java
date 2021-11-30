@@ -5,6 +5,7 @@ import gecko10000.AdventureCalendar.misc.Config;
 import gecko10000.AdventureCalendar.misc.PAPIExpansion;
 import gecko10000.AdventureCalendar.misc.PlayerDataManager;
 import gecko10000.AdventureCalendar.misc.Present;
+import me.arcaniax.hdb.api.DatabaseLoadEvent;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
@@ -29,7 +30,7 @@ public class AdventureCalendar extends JavaPlugin {
 
     @ConfigValue
     public Map<Integer, Present> presents = ConfigManager.map(Integer.class, Present.class);
-    public CalendarEditor calendarEditor;
+    public CalendarEditor calendarEditor = null;
     public static boolean papi;
     public static boolean headDB;
     private PAPIExpansion papiExpansion;
@@ -46,6 +47,11 @@ public class AdventureCalendar extends JavaPlugin {
         new CommandHandler(this);
         Bukkit.getOnlinePlayers().forEach(PlayerDataManager::initPlayer);
         new EventListener<>(PlayerJoinEvent.class, evt -> PlayerDataManager.initPlayer(evt.getPlayer()));
+        if (headDB) {
+            new EventListener<>(DatabaseLoadEvent.class, evt -> calendarEditor = new CalendarEditor(this));
+        } else {
+            calendarEditor = new CalendarEditor(this);
+        }
     }
 
     public void onDisable() {
@@ -72,7 +78,6 @@ public class AdventureCalendar extends JavaPlugin {
             presents.putIfAbsent(i, new Present(i));
         }
         presentConfig.save();
-        calendarEditor = new CalendarEditor(this);
     }
 
     private static final Predicate<String> HDB_PATTERN = Pattern.compile("hdb-[0-9]+").asPredicate();
