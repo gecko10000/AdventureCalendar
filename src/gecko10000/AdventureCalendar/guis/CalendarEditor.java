@@ -50,7 +50,9 @@ public class CalendarEditor {
     }
 
     public ItemStack unclaimedItem(Present present) {
-        return new ItemBuilder(AdventureCalendar.getItem(Config.unclaimedMaterial))
+        return new ItemBuilder(present.getItems().size() == 0
+                ? AdventureCalendar.getItem(Config.unclaimedMaterial)
+                : present.getItems().get(0))
                 .setName(AdventureCalendar.msg(present.color() + "Day " + present.day))
                 .setCount(present.day)
                 .addLore("")
