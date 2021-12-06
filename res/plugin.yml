@@ -1,6 +1,6 @@
 name: AdventureCalendar
 main: gecko10000.AdventureCalendar.AdventureCalendar
-version: 1.4
+version: 1.5
 api-version: 1.13
 author: gecko10000
 depend:
