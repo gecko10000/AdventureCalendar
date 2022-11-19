@@ -2,6 +2,7 @@ package gecko10000.AdventureCalendar.guis;
 
 import gecko10000.AdventureCalendar.AdventureCalendar;
 import gecko10000.AdventureCalendar.misc.Present;
+import gecko10000.AdventureCalendar.misc.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -39,7 +40,7 @@ public class PresentEditor {
         this.plugin = plugin;
         this.present = present;
         this.player = player;
-        gui = new InventoryGUI(Bukkit.createInventory(null, SIZE, AdventureCalendar.msg("&9Items&2                Commands")));
+        gui = new InventoryGUI(Bukkit.createInventory(null, SIZE, Utils.msg("&9Items&2                Commands")));
         commandPanel = new PaginationPanel(gui);
         setupEditor();
         gui.open(player);
@@ -65,11 +66,11 @@ public class PresentEditor {
         gui.openSlots(0, 0, 4, SIZE/9 - 1);
         commandPanel.addSlots(5, 0, 9, SIZE/9 - 1);
         gui.addButton(SIZE - 9, ItemButton.create(new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                .setName(AdventureCalendar.msg("&cBack")), evt -> plugin.calendarEditor.open(player)));
+                .setName(Utils.msg("&cBack")), evt -> plugin.calendarEditor.open(player)));
         gui.addButton(SIZE - 4, ItemButton.create(new ItemBuilder(Material.RED_STAINED_GLASS_PANE)
-                .setName(AdventureCalendar.msg("&cPrevious")), evt -> commandPanel.prevPage()));
+                .setName(Utils.msg("&cPrevious")), evt -> commandPanel.prevPage()));
         gui.addButton(SIZE - 1, ItemButton.create(new ItemBuilder(Material.LIME_STAINED_GLASS_PANE)
-                .setName(AdventureCalendar.msg("&aNext")), evt -> commandPanel.nextPage()));
+                .setName(Utils.msg("&aNext")), evt -> commandPanel.nextPage()));
         updateCount();
         populateItems();
         updateCommandPanel();
@@ -113,7 +114,7 @@ public class PresentEditor {
             }));
         }
         commandPanel.addPagedButton(ItemButton.create(new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE)
-                .setName(AdventureCalendar.msg("&aAdd Command")), evt -> enterEditMode(null)
+                .setName(Utils.msg("&aAdd Command")), evt -> enterEditMode(null)
                         .thenAccept(response -> {
                             if (response != null) {
                                 commands.add(response);
@@ -129,7 +130,7 @@ public class PresentEditor {
                 .setName(ChatColor.WHITE + split.get(0))
                 .addLore(split.subList(1, split.size()).stream().map(s -> ChatColor.WHITE + s).collect(Collectors.toList()))
                 .addLore(Stream.of("", "&aLeft click to change the command", "&aShift+click to remove")
-                        .map(AdventureCalendar::msg).collect(Collectors.toList()));
+                        .map(Utils::msg).collect(Collectors.toList()));
     }
 
     private CompletableFuture<String> enterEditMode(String original) {
@@ -140,7 +141,7 @@ public class PresentEditor {
             editMessage = new TextComponent("Enter the new command");
         } else {
             editMessage = new TextComponent("Enter the new command (click to insert previous one into chat)");
-            editMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(AdventureCalendar.msg("&aClick to insert into chat"))));
+            editMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(Utils.msg("&aClick to insert into chat"))));
             editMessage.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, original));
         }
         editMessage.setColor(ChatColor.YELLOW);

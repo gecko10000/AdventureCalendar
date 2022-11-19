@@ -4,6 +4,7 @@ import gecko10000.AdventureCalendar.guis.Calendar;
 import gecko10000.AdventureCalendar.misc.Config;
 import gecko10000.AdventureCalendar.misc.PlayerDataManager;
 import gecko10000.AdventureCalendar.misc.Present;
+import gecko10000.AdventureCalendar.misc.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,7 @@ public class CommandHandler {
     @CommandHook("menu")
     public void menu(Player player) {
         if (LocalDate.now().getMonth() != Config.month && !player.hasPermission("acal.bypass")) {
-            player.sendMessage(AdventureCalendar.placeholderMsg(
+            player.sendMessage(Utils.placeholderMsg(
                     Config.wrongMonthMessage
                             .replace("%month%", FormatUtils.toTitleCase(Config.month.toString()))
                             .replace("%first%", Config.firstDay + "")
@@ -47,25 +48,25 @@ public class CommandHandler {
         }
         if (Config.calendarAlias.equals("")) {
             if (plugin.calendarEditor == null) {
-                player.sendMessage(AdventureCalendar.msg(Config.headDatabaseNotLoadedYet));
+                player.sendMessage(Utils.msg(Config.headDatabaseNotLoadedYet));
                 return;
             }
             new Calendar(plugin, player);
         } else {
-            Bukkit.dispatchCommand(player, AdventureCalendar.placeholderMsg(Config.calendarAlias, player));
+            Bukkit.dispatchCommand(player, Utils.placeholderMsg(Config.calendarAlias, player));
         }
     }
 
     @CommandHook("reload")
     public void reload(CommandSender sender) {
         plugin.reload();
-        sender.sendMessage(AdventureCalendar.msg("&aConfigs reloaded!"));
+        sender.sendMessage(Utils.msg("&aConfigs reloaded!"));
     }
 
     @CommandHook("edit")
     public void edit(Player player) {
         if (plugin.calendarEditor == null) {
-            player.sendMessage(AdventureCalendar.msg("&cHDB not loaded yet."));
+            player.sendMessage(Utils.msg("&cHDB not loaded yet."));
             return;
         }
         plugin.calendarEditor.open(player);
@@ -74,36 +75,36 @@ public class CommandHandler {
     @CommandHook("claim")
     public void claim(CommandSender sender, Player target, Present present, boolean force) {
         if (force && !sender.hasPermission("acal.claim.force")) {
-            sender.sendMessage(AdventureCalendar.msg(Config.notAllowedMessage));
+            sender.sendMessage(Utils.msg(Config.notAllowedMessage));
             return;
         }
         if (!sender.equals(target) && !sender.hasPermission("acal.claim.others")) {
-            sender.sendMessage(AdventureCalendar.msg(Config.notAllowedMessage));
+            sender.sendMessage(Utils.msg(Config.notAllowedMessage));
             return;
         }
         present = present == null ? plugin.presents.get(LocalDate.now().getDayOfMonth()) : present;
         if (present == null) {
-            sender.sendMessage(AdventureCalendar.msg(Config.noPresentMessage));
+            sender.sendMessage(Utils.msg(Config.noPresentMessage));
             return;
         }
         present.claim(target, force);
     }
 
     @CommandHook("resetOne")
-    public void reset(CommandSender sender, Present present, OfflinePlayer target) {
+    public void reset(CommandSender sender, OfflinePlayer target, Present present) {
         Present finalPresent = present == null ? plugin.presents.get(LocalDate.now().getDayOfMonth()) : present;
         if (finalPresent == null) {
             return;
         }
         PlayerDataManager.set(target, finalPresent.day, false).thenAccept(unused -> {
-            sender.sendMessage(AdventureCalendar.msg("&aReset " + target.getName() + "'s claim status for day " + finalPresent.day));
+            sender.sendMessage(Utils.msg("&aReset " + target.getName() + "'s claim status for day " + finalPresent.day + "."));
         });
     }
 
     @CommandHook("resetAll")
     public void resetAll(CommandSender sender, OfflinePlayer target) {
         PlayerDataManager.setRaw(target.getUniqueId(), 0).thenAccept(unused -> {
-            sender.sendMessage(AdventureCalendar.msg("&aReset advent calendar for " + target.getName() + "."));
+            sender.sendMessage(Utils.msg("&aReset advent calendar for " + target.getName() + "."));
         });
     }
 
@@ -115,7 +116,7 @@ public class CommandHandler {
             return;
         }
         PlayerDataManager.clearAll().thenAccept(unused -> {
-            sender.sendMessage(AdventureCalendar.msg("&aReset advent calendar for everyone."));
+            sender.sendMessage(Utils.msg("&aReset advent calendar for everyone."));
         });
     }
 
@@ -125,7 +126,7 @@ public class CommandHandler {
             return;
         }
         PlayerDataManager.clearAll(present.day).thenAccept(unused -> {
-            sender.sendMessage(AdventureCalendar.msg("&aReset day " + present.day + " for everyone."));
+            sender.sendMessage(Utils.msg("&aReset day " + present.day + " for everyone."));
         });
     }
 
@@ -133,7 +134,7 @@ public class CommandHandler {
         if (!resetConfirmations.remove(sender)) {
             resetConfirmations.add(sender);
             Task.syncDelayed(() -> resetConfirmations.remove(sender), 200);
-            sender.sendMessage(AdventureCalendar.msg("&cThis is a dangerous command. Run again in the next 10 seconds to confirm."));
+            sender.sendMessage(Utils.msg("&cThis is a dangerous command. Run again in the next 10 seconds to confirm."));
             return false;
         }
         return true;

@@ -19,7 +19,7 @@ adventurecalendar,acal {
         help Claim today's gift
         hook claim
     }
-    reset present:present? offlineplayer:target?(context self) {
+    reset offlineplayer:target?(context self) present:present? {
         permission acal.reset
         help Reset a present for a player
         hook resetOne

@@ -3,6 +3,7 @@ package gecko10000.AdventureCalendar.guis;
 import gecko10000.AdventureCalendar.AdventureCalendar;
 import gecko10000.AdventureCalendar.misc.Config;
 import gecko10000.AdventureCalendar.misc.Present;
+import gecko10000.AdventureCalendar.misc.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +23,7 @@ public class CalendarEditor {
         this.size = ItemUtils.minimumChestSize(Config.lastDay - Config.firstDay + 1);
         this.plugin = plugin;
         this.gui = new InventoryGUI(Bukkit.createInventory(null, size,
-                AdventureCalendar.msg("&2Edit Advent Calendar")));
+                Utils.msg("&2Edit Advent Calendar")));
         setupEditor();
     }
 
@@ -53,11 +54,11 @@ public class CalendarEditor {
         return new ItemBuilder(present.getItems().size() == 0
                 ? AdventureCalendar.getItem(Config.unclaimedMaterial)
                 : present.getItems().get(0))
-                .setName(AdventureCalendar.msg(present.color() + "Day " + present.day))
+                .setName(Utils.msg(present.color() + "Day " + present.day))
                 .setCount(present.day)
                 .addLore("")
-                .addLore(AdventureCalendar.msg("&9Items: &e" + present.getItems().stream().mapToInt(ItemStack::getAmount).sum()))
-                .addLore(AdventureCalendar.msg("&2Commands: &e" + present.getCommands().size()));
+                .addLore(Utils.msg("&9Items: &e" + present.getItems().stream().mapToInt(ItemStack::getAmount).sum()))
+                .addLore(Utils.msg("&2Commands: &e" + present.getCommands().size()));
     }
 
     public void open(Player player) {

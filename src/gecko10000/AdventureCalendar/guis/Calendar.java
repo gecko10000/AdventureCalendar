@@ -3,6 +3,7 @@ package gecko10000.AdventureCalendar.guis;
 import gecko10000.AdventureCalendar.AdventureCalendar;
 import gecko10000.AdventureCalendar.misc.Config;
 import gecko10000.AdventureCalendar.misc.Present;
+import gecko10000.AdventureCalendar.misc.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +24,7 @@ public class Calendar {
 
     public Calendar(AdventureCalendar plugin, Player player) {
         this.plugin = plugin;
-        this.gui = new InventoryGUI(Bukkit.createInventory(null, SIZE, AdventureCalendar.msg(Config.guiName)));
+        this.gui = new InventoryGUI(Bukkit.createInventory(null, SIZE, Utils.msg(Config.guiName)));
         this.player = player;
         setupCalendar();
         gui.open(player);

@@ -82,12 +82,12 @@ public class Present {
     }
 
     public ItemStack item(Player player, boolean claimed) {
-        String name = AdventureCalendar.placeholderMsg(
+        String name = Utils.placeholderMsg(
                 color() + (claimed ? Config.claimedName : isVoid() ? Config.missedName : Config.unclaimedName),
                 player, this);
-        name = AdventureCalendar.placeholderMsg(name, player, this);
+        name = Utils.placeholderMsg(name, player, this);
         List<String> lore = (claimed ? Config.claimedLore : isVoid() ? Config.missedLore : Config.unclaimedLore).stream()
-                .map(s -> AdventureCalendar.placeholderMsg(s, player, this))
+                .map(s -> Utils.placeholderMsg(s, player, this))
                 .collect(Collectors.toList());
         ItemBuilder item = new ItemBuilder(AdventureCalendar.getItem(claimed
                 ? items.size() == 0 || !Config.useClaimedItem
@@ -116,14 +116,14 @@ public class Present {
         PlayerDataManager.isClaimed(player, day).thenAccept(claimed -> {
             if (!claimed || force) {
                 if (!isClaimable() && !force) {
-                    player.sendMessage(AdventureCalendar.placeholderMsg(
+                    player.sendMessage(Utils.placeholderMsg(
                             isVoid() ? Config.missedPresent : Config.cannotClaimToday, player, this));
                     return;
                 }
                 Task.syncDelayed(() -> execute(player));
                 PlayerDataManager.set(player, day, true);
             } else {
-                player.sendMessage(AdventureCalendar.placeholderMsg(Config.alreadyClaimed, player, this));
+                player.sendMessage(Utils.placeholderMsg(Config.alreadyClaimed, player, this));
             }
         });
 
