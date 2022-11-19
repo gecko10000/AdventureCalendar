@@ -8,16 +8,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import redempt.redlib.configmanager.ConfigManager;
-import redempt.redlib.configmanager.annotations.ConfigMappable;
-import redempt.redlib.configmanager.annotations.ConfigPath;
-import redempt.redlib.configmanager.annotations.ConfigPostInit;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.annotations.ConfigMappable;
 import redempt.redlib.itemutils.ItemBuilder;
 import redempt.redlib.itemutils.ItemUtils;
 import redempt.redlib.misc.Task;
 
 import java.time.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -27,25 +24,19 @@ public class Present {
 
     public int day;
 
-    @ConfigPath
-    private String dayString;
+    private List<String> commands = new ArrayList<>();
 
-    @ConfigValue
-    private List<String> commands = ConfigManager.list(String.class);
-
-    @ConfigValue
-    private List<ItemStack> items = ConfigManager.list(ItemStack.class);
+    private List<ItemStack> items = new ArrayList<>();
 
     private Present() {}
 
-    @ConfigPostInit
+    /*@ConfigPostInit
     private void postInit() {
         this.day = Integer.parseInt(dayString);
-    }
+    }*/
 
     public Present(int day) {
         this.day = day;
-        dayString = "" + day;
     }
 
     public Present addItems(List<ItemStack> items) {

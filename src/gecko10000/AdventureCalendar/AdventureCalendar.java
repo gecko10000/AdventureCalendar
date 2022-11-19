@@ -1,10 +1,7 @@
 package gecko10000.AdventureCalendar;
 
 import gecko10000.AdventureCalendar.guis.CalendarEditor;
-import gecko10000.AdventureCalendar.misc.Config;
-import gecko10000.AdventureCalendar.misc.PAPIExpansion;
-import gecko10000.AdventureCalendar.misc.PlayerDataManager;
-import gecko10000.AdventureCalendar.misc.Present;
+import gecko10000.AdventureCalendar.misc.*;
 import me.arcaniax.hdb.api.DatabaseLoadEvent;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -15,28 +12,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import redempt.redlib.configmanager.ConfigManager;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.ConfigManager;
+import redempt.redlib.config.annotations.ConfigMappable;
 import redempt.redlib.misc.EventListener;
 
 import java.time.Month;
-import java.util.Locale;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+@ConfigMappable
 public class AdventureCalendar extends JavaPlugin {
 
-    @ConfigValue
-    public Map<Integer, Present> presents = ConfigManager.map(Integer.class, Present.class);
-    public CalendarEditor calendarEditor = null;
+    public Map<Integer, Present> presents = new HashMap<>();
+    public transient CalendarEditor calendarEditor = null;
     public static boolean papi;
     public static boolean headDB;
-    private PAPIExpansion papiExpansion;
+    private transient PAPIExpansion papiExpansion;
 
-    public ConfigManager config;
-    public ConfigManager presentConfig;
+    public transient ConfigManager config;
+    public transient ConfigManager presentConfig;
 
     private static AdventureCalendar instance;
 
@@ -48,7 +45,8 @@ public class AdventureCalendar extends JavaPlugin {
         Bukkit.getOnlinePlayers().forEach(PlayerDataManager::initPlayer);
         new EventListener<>(PlayerJoinEvent.class, evt -> PlayerDataManager.initPlayer(evt.getPlayer()));
         if (headDB) {
-            new EventListener<>(DatabaseLoadEvent.class, evt -> calendarEditor = new CalendarEditor(this));
+            // in a separate file so we don't get ClassNotFoundExceptions
+            HeadDBLoader.dbLoad().thenRun(() -> calendarEditor = new CalendarEditor(this));
         } else {
             calendarEditor = new CalendarEditor(this);
         }
@@ -66,12 +64,12 @@ public class AdventureCalendar extends JavaPlugin {
             papiExpansion = new PAPIExpansion(this);
         }
         headDB = Bukkit.getPluginManager().isPluginEnabled("HeadDatabase");
-        config = new ConfigManager(this)
+        config = ConfigManager.create(this)
                 .addConverter(Month.class, m -> Month.valueOf(m.toUpperCase()), Month::toString)
-                .register(Config.class)
+                .target(Config.class)
                 .saveDefaults().load();
-        presentConfig = new ConfigManager(this, "presents.yml")
-                .register(this)
+        presentConfig = ConfigManager.create(this, "presents.yml")
+                .target(this)
                 .saveDefaults().load();
         presents.keySet().removeIf(i -> i < Config.firstDay || i > Config.lastDay);
         for (int i = Config.firstDay; i <= Config.lastDay; i++) {

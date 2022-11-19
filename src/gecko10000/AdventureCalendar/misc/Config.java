@@ -1,103 +1,109 @@
 package gecko10000.AdventureCalendar.misc;
 
-import redempt.redlib.configmanager.ConfigManager;
-import redempt.redlib.configmanager.annotations.ConfigValue;
+import redempt.redlib.config.ConfigManager;
+import redempt.redlib.config.annotations.ConfigName;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Config {
 
-    @ConfigValue
     public static Month month = Month.DECEMBER;
 
-    @ConfigValue("first-day")
+    @ConfigName("first-day")
     public static int firstDay = 1;
 
-    @ConfigValue("last-day")
+    @ConfigName("last-day")
     public static int lastDay = 25;
 
-    @ConfigValue("sql.use-mySQL")
+    @ConfigName("sql.use-mySQL")
     public static boolean mySQL = false;
 
-    @ConfigValue("sql.ip")
+    @ConfigName("sql.ip")
     public static String ip = "192.168.1.1";
 
-    @ConfigValue("sql.port")
+    @ConfigName("sql.port")
     public static int port = 3306;
 
-    @ConfigValue("sql.username")
+    @ConfigName("sql.username")
     public static String username = "username";
 
-    @ConfigValue("sql.password")
+    @ConfigName("sql.password")
     public static String password = "password";
 
-    @ConfigValue("sql.database")
+    @ConfigName("sql.database")
     public static String database = "adventurecalendar";
 
-    @ConfigValue("items.unclaimed.material")
+    @ConfigName("items.unclaimed.material")
     public static String unclaimedMaterial = "CHEST_MINECART";
 
-    @ConfigValue("items.unclaimed.name")
+    @ConfigName("items.unclaimed.name")
     public static String unclaimedName = "Day {day}";
 
-    @ConfigValue("items.unclaimed.lore")
-    public static List<String> unclaimedLore = ConfigManager.stringList("&fTime to unlock: %adventurecalendar_timeuntil_{day}%");
+    @ConfigName("items.unclaimed.lore")
+    public static List<String> unclaimedLore = new ArrayList<>(List.of(
+            "&fTime to unlock: %adventurecalendar_timeuntil_{day}%"
+    ));
 
-    @ConfigValue("items.claimed.material")
+    @ConfigName("items.claimed.material")
     public static String claimedMaterial = "MINECART";
 
-    @ConfigValue("items.claimed.name")
+    @ConfigName("items.claimed.name")
     public static String claimedName = "Day {day}";
 
-    @ConfigValue("items.claimed.lore")
-    public static List<String> claimedLore = ConfigManager.stringList("&2Already claimed!");
+    @ConfigName("items.claimed.lore")
+    public static List<String> claimedLore = new ArrayList<>(List.of(
+            "&2Already claimed!"
+    ));
 
-    @ConfigValue("items.claimed.use-claimed-item-from-day-automatically")
+    @ConfigName("items.claimed.use-claimed-item-from-day-automatically")
     public static boolean useClaimedItem = true;
 
-    @ConfigValue("items.missed.material")
+    @ConfigName("items.missed.material")
     public static String missedMaterial = "MINECART";
 
-    @ConfigValue("items.missed.name")
+    @ConfigName("items.missed.name")
     public static String missedName = "Day {day}";
 
-    @ConfigValue("items.missed.lore")
-    public static List<String> missedLore = ConfigManager.stringList("&4You missed this one!");
+    @ConfigName("items.missed.lore")
+    public static List<String> missedLore = new ArrayList<>(List.of(
+            "&4You missed this one!"
+    ));
 
-    @ConfigValue("gui.name")
+    @ConfigName("gui.name")
     public static String guiName = "          &4Advent &2Calendar";
 
-    @ConfigValue("gui.command-alias")
+    @ConfigName("gui.command-alias")
     public static String calendarAlias = "";
 
-    @ConfigValue("messages.wrong-month")
+    @ConfigName("messages.wrong-month")
     public static String wrongMonthMessage = "&cIt is not %month% %first% - %last%!";
 
-    @ConfigValue("messages.not-allowed")
+    @ConfigName("messages.not-allowed")
     public static String notAllowedMessage = "&cYou are not allowed to do this!";
 
-    @ConfigValue("messages.no-present")
+    @ConfigName("messages.no-present")
     public static String noPresentMessage = "&cThere is no present for this day!";
 
-    @ConfigValue("messages.missed-present")
+    @ConfigName("messages.missed-present")
     public static String missedPresent = "&cYou missed this present!";
 
-    @ConfigValue("messages.cannot-claim-today")
+    @ConfigName("messages.cannot-claim-today")
     public static String cannotClaimToday = "&cYou cannot claim this today! Wait %adventurecalendar_timeuntil_{day}%!";
 
-    @ConfigValue("messages.already-claimed")
+    @ConfigName("messages.already-claimed")
     public static String alreadyClaimed = "&cYou have already claimed this present!";
 
-    @ConfigValue("messages.head-database-not-loaded-yet")
+    @ConfigName("messages.head-database-not-loaded-yet")
     public static String headDatabaseNotLoadedYet = "&cWait a bit before opening this menu!";
 
-    @ConfigValue("commands-to-run-on-every-present")
-    public static List<String> everyPresentCommands = ConfigManager.stringList(
+    @ConfigName("commands-to-run-on-every-present")
+    public static List<String> everyPresentCommands = new ArrayList<>(List.of(
             "broadcast &a%player_name% &ejust claimed their day {day} present! &n/acal&e!"
-    );
+    ));
 
-    @ConfigValue("unlocked-present-word")
+    @ConfigName("unlocked-present-word")
     public static String unlockedPresentWord = "Unlocked";
 
 }
