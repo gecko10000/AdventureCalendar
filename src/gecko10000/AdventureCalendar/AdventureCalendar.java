@@ -39,6 +39,7 @@ public class AdventureCalendar extends JavaPlugin {
         new CommandHandler(this);
         Bukkit.getOnlinePlayers().forEach(PlayerDataManager::initPlayer);
         new EventListener<>(PlayerJoinEvent.class, evt -> PlayerDataManager.initPlayer(evt.getPlayer()));
+        if (papi) new PAPIExpansion(this);
         if (headDB) {
             // in a separate file so we don't get ClassNotFoundExceptions
             HeadDBLoader.dbLoad().thenRun(() -> calendarEditor = new CalendarEditor(this));
