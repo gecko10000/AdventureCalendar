@@ -81,10 +81,15 @@ public class PAPIExpansion extends PlaceholderExpansion {
     }
 
     private int getSoonestPresent() {
+        LocalDate now = LocalDate.now();
+        // return first present if not in the month
+        if (Config.month != now.getMonth()) return plugin.presents.keySet().stream()
+                .sorted()
+                .findFirst().orElse(-1);
         return plugin.presents.keySet().stream()
                 .sorted()
-                .dropWhile(i -> i <= LocalDate.now().getDayOfMonth())
-                .findFirst().orElse(0);
+                .dropWhile(i -> i <= now.getDayOfMonth())
+                .findFirst().orElse(-1);
     }
 
 }
