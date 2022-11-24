@@ -30,11 +30,6 @@ public class Present {
 
     private Present() {}
 
-    /*@ConfigPostInit
-    private void postInit() {
-        this.day = Integer.parseInt(dayString);
-    }*/
-
     public Present(int day) {
         this.day = day;
     }
@@ -60,16 +55,16 @@ public class Present {
     }
 
     public String formattedTimeUntilUnlock() {
-        long seconds = secondsUntilUnlock();
-        if (seconds <= 0) {
+        Duration time = timeUntilUnlock();
+        if (time.isNegative()) {
             return Config.unlockedPresentWord;
         }
-        return String.format("%01d:%02d:%02d:%02d", seconds/86400, (seconds % 86400) / 3600, (seconds % 3600) / 60, (seconds % 60));
+        return Config.useCleanDuration ? Utils.readableDuration(time) : Utils.oldDuration(time);
     }
 
-    public long secondsUntilUnlock() {
+    public Duration timeUntilUnlock() {
         return Duration.between(LocalDateTime.now(),
-                LocalTime.MIDNIGHT.atDate(LocalDate.of(LocalDate.now().getYear(), Config.month, day))).getSeconds();
+                LocalTime.MIDNIGHT.atDate(LocalDate.of(LocalDate.now().getYear(), Config.month, day)));
     }
 
     public ItemStack displayItemFor(Player player) {

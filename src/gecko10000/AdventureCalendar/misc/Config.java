@@ -1,6 +1,7 @@
 package gecko10000.AdventureCalendar.misc;
 
 import org.bukkit.Material;
+import redempt.redlib.config.annotations.Comment;
 import redempt.redlib.config.annotations.ConfigName;
 
 import java.time.Month;
@@ -111,5 +112,9 @@ public class Config {
 
     @ConfigName("unlocked-present-word")
     public static String unlockedPresentWord = "Unlocked";
+
+    @Comment("Setting this to true will change times to be shown as 1.3d or 40.2m or 18.4h")
+    @ConfigName("use-clean-duration")
+    public static boolean useCleanDuration = false;
 
 }
