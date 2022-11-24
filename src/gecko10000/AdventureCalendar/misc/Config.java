@@ -80,6 +80,9 @@ public class Config {
     @ConfigName("gui.command-alias")
     public static String calendarAlias = "";
 
+    @ConfigName("gui.sort-presents")
+    public static boolean sortPresents = false;
+
     @ConfigName("messages.wrong-month")
     public static String wrongMonthMessage = "&cIt is not %month% %first% - %last%!";
 

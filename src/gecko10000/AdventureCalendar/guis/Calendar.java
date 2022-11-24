@@ -35,7 +35,8 @@ public class Calendar {
     private void setupCalendar() {
         gui.fill(0, SIZE, Utils.fillerItem());
         Set<Present> presents = new HashSet<>(plugin.presents.values());
-        Iterator<Present> presentIterator = presents.iterator();
+
+        Iterator<Present> presentIterator = Config.sortPresents ? presents.stream().sorted(Comparator.comparingInt(p -> p.day)).iterator() : presents.iterator();
         int slot = 1;
         while (slot < 53 && presentIterator.hasNext()) {
             Present present = presentIterator.next();
