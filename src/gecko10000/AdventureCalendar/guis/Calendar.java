@@ -33,7 +33,7 @@ public class Calendar {
     Map<Integer, Present> slots = new HashMap<>();
 
     private void setupCalendar() {
-        gui.fill(0, SIZE, InventoryGUI.FILLER);
+        gui.fill(0, SIZE, Utils.fillerItem());
         Set<Present> presents = new HashSet<>(plugin.presents.values());
         Iterator<Present> presentIterator = presents.iterator();
         int slot = 1;

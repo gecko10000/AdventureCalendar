@@ -61,8 +61,8 @@ public class PresentEditor {
             updateCount();
             plugin.presentConfig.save();
         }));
-        gui.fill(SIZE - 8, SIZE, InventoryGUI.FILLER);
-        gui.fill(4, 0, 5, SIZE/9, InventoryGUI.FILLER);
+        gui.fill(SIZE - 8, SIZE, Utils.fillerItem());
+        gui.fill(4, 0, 5, SIZE/9, Utils.fillerItem());
         gui.openSlots(0, 0, 4, SIZE/9 - 1);
         commandPanel.addSlots(5, 0, 9, SIZE/9 - 1);
         gui.addButton(SIZE - 9, ItemButton.create(new ItemBuilder(Material.RED_STAINED_GLASS_PANE)

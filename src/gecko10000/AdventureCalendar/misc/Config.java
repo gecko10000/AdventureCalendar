@@ -1,6 +1,6 @@
 package gecko10000.AdventureCalendar.misc;
 
-import redempt.redlib.config.ConfigManager;
+import org.bukkit.Material;
 import redempt.redlib.config.annotations.ConfigName;
 
 import java.time.Month;
@@ -34,6 +34,9 @@ public class Config {
 
     @ConfigName("sql.database")
     public static String database = "adventurecalendar";
+
+    @ConfigName("items.filler")
+    public static Material fillerMaterial = Material.GRAY_STAINED_GLASS_PANE;
 
     @ConfigName("items.unclaimed.material")
     public static String unclaimedMaterial = "CHEST_MINECART";
